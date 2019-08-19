@@ -24,21 +24,21 @@ const kittyPrompts = {
     
     // Return an array of just the names of kitties who are orange e.g.
     // ['Tiger', 'Snickers']
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = kitties.filter(obj => obj.color === 'orange').map(obj => obj.name);
     return result;
 
     // Annotation:
-    // Write your annotation here as a comment
+    //We want to filter the given array to include only objects with a color property that is equal to 'orange'. Then we use map to create a new array of those objects that only returns the value of their name, which is a string.
   },
 
   sortByAge() {
     // Sort the kitties by their age
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = kitties.sort((a, b) => (a.age > b.age) ? -1 : 1);
     return result;
 
     // Annotation:
-    // Write your annotation here as a comment
+    // We want to sort the given array of objects by the value of their age property in descending order. We compare the values of the age property for each object and then order them. *Sort is a mutator method.
   },
 
   growUp() {
@@ -55,11 +55,16 @@ const kittyPrompts = {
     // },
     // ...etc]
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = kitties.map(function(kittenObj) {
+      kittenObj.age += 2;
+      return kittenObj;
+    });
     return result;
   }
 };
 
+//Annotation:
+//We use map to return a new array of objects that have updated values for the age property.
 
 
 
@@ -70,7 +75,6 @@ const kittyPrompts = {
 // ---------------------------------------------------------------------------
 // ---------------------------------------------------------------------------
 // ---------------------------------------------------------------------------
-
 
 
 
@@ -87,11 +91,19 @@ const clubPrompts = {
     //   ...etc
     // }
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = clubs.reduce((acc, clubObj) => {
+      clubObj.members.forEach(name => {
+        if(!acc[name]) {
+          acc[name] = [];
+        }
+        acc[name].push(clubObj.club);
+      });
+      return acc;
+    }, {});
     return result;
 
     // Annotation:
-    // Write your annotation here as a comment
+    // Use reduce to return a single object from an array of objects. Check first to see if the name of the key exists and if it doesn't add it. Then push all of the strings from the club property into that array.
   }
 };
 
@@ -123,11 +135,17 @@ const modPrompts = {
     //   { mod: 4, studentsPerInstructor: 8 }
     // ]
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = mods.map((modObj) => {
+      let newModObj = {
+        mod: modObj.mod,
+        studentsPerInstructor: modObj.students / modObj.instructors
+      };
+      return newModObj;
+    });
     return result;
 
     // Annotation:
-    // Write your annotation here as a comment
+    // We use map to create new versions of the existing objects in the array. We map existing objects to a new object that only contains the keys 'mod' and 'studentsPerInstructor'. *map returns an array of the same length*
   }
 };
 
@@ -158,11 +176,17 @@ const cakePrompts = {
     //    ..etc
     // ]
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = cakes.map((cakeObj) => {
+      let newCakeObj = {
+        flavor: cakeObj.cakeFlavor,
+        inStock: cakeObj.inStock
+      };
+      return newCakeObj;
+    });
     return result;
 
     // Annotation:
-    // Write your annotation here as a comment
+    // We use map to create an array of objects that only contain the keys 'flavor' and 'inStock'.
   },
 
   onlyInStock() {
@@ -186,22 +210,24 @@ const cakePrompts = {
     // ..etc
     // ]
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = cakes.filter((cakeObj) => cakeObj.inStock !== 0);
     return result;
 
     // Annotation:
-    // Write your annotation here as a comment
+    // We use filter to create a new array of the objects that match the given criteria. In this case they are included only if the value of the inStock property is not 0.
   },
   
   totalInventory() {
     // Return the total amount of cakes in stock e.g.
     // 59
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = cakes.reduce((prev, curr) => {
+      return prev + curr.inStock;
+    }, 0);
     return result;
 
     // Annotation:
-    // Write your annotation here as a comment
+    // We use reduce to add the values of the inStock property from each of the given objects. The initial value is 0.
   },
 
   allToppings() {
@@ -209,11 +235,18 @@ const cakePrompts = {
     // every cake in the dataset e.g.
     // ['dutch process cocoa', 'toasted sugar', 'smoked sea salt', 'berries', ..etc]
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = cakes.reduce((toppingsArr, cakeObj) => {
+      cakeObj.toppings.forEach((topping) => {
+        if(!toppingsArr.includes(topping)) {
+          toppingsArr.push(topping);
+        }
+      });
+      return toppingsArr;
+    }, []);
     return result;
 
     // Annotation:
-    // Write your annotation here as a comment
+    // We use reduce to iterate through the array of cake objects and use a forEach to iterate through the array of toppings on each of these objects. We add each topping if not already contained in the array to the new array being returned 'toppingsArr'.
   },
 
   groceryList() {
@@ -227,11 +260,19 @@ const cakePrompts = {
     //    ...etc
     // }
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = cakes.reduce((groceryList, cakeObj) => {
+      cakeObj.toppings.forEach((topping) => {
+        if(!groceryList[topping]) {
+          groceryList[topping] = 0;
+        }
+        groceryList[topping]++;
+      });
+      return groceryList;
+    }, {});
     return result;
 
     // Annotation:
-    // Write your annotation here as a comment
+    // We use reduce to iterate through the array of cake objects and then a forEach to target the toppings array on the cake objects. We check to see if they topping key already exists in our grocery list and if it does not we add it and increment the value of the key. If it already exists we increment the value only.
   }
 };
 
@@ -262,11 +303,11 @@ const classPrompts = {
     //   { roomLetter: 'G', program: 'FE', capacity: 29 }
     // ]
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = classrooms.filter((classroomObj) => classroomObj.program === 'FE');
     return result;
 
     // Annotation:
-    // Write your annotation here as a comment
+    // We use filter to return a new array of objects that only contain a program value of 'FE'.
   },
 
   totalCapacities() {
